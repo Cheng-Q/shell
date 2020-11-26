@@ -2,13 +2,14 @@ const express = require('express')
 
 const fs = require('fs')
 const md5 = require('md5')
-const process = require('child_process') // node 执行cmd命令
+const process = require('child_process'); // node 执行cmd命令
 // const ls = process.spawn('ls',['-lh','/usr'])
-const ls = process.spawn('ls',['-lh','/usr'])
+const child = process.spawnSync('ls',['-l','/usr'])
 let preveMd5 = null,
     fsWait = false
+console.log('stdout here: \n' + child.stdout);
 
-const filePath = '/Users/cq/Desktop/工作/GIT/Node/server.js'
+const filePath = '/www/server/package.json'
 const app = express()
 app.all('*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*'); //访问控制允许来源：所有
@@ -31,11 +32,15 @@ fs.watch(filePath,(event,filename) => {
     }
     preveMd5 = currentMd5
     console.log(`${filePath}文件发生更新`)
-    process.exec(`./nodeRun.sh`,function(error, stdout, stderr){
-      console.log(error)
-      console.log("stdout:",stdout)
-      console.log("stderr:",stderr);
+    aa = process.execFile(`./nodeRun.sh`,['arg1','arg2','arg3'],{//分离和忽略的stdin是这里的关键：
+      detached:true,
+      stdio:[ 'ignore',1,2]
     })
+    //和unref（）会以某种方式使孩子的事件循环与父母的事件循环分离：
+    aa.unref(); 
+    aa.stdout.on('data',function (data) {
+      console.log('shell***' + data);
+    });
     // process.exec(`cd /Users/cq/Desktop/工作/GIT/Node/ && mkdir aa && cd aa && mkdir bb`,function(error, stdout, stderr){
     //   console.log(error)
     //   console.log("stdout:",stdout)
@@ -43,21 +48,17 @@ fs.watch(filePath,(event,filename) => {
     // })
   }
 })
-ls.stdout.on('data', (data) => {
-  console.log(`stdout: ${data}`);
-});
 
-// ls.stderr.on('data', (data) => {
-//   console.error(`stderr: ${data}`);
+// child.stdout.on('data',function (data) {
+//         console.log('ls command output: ' + data);
+//     });
+// child.stderr.on('data',function (data) {
+//     //throw errors
+//     console.log('stderr: ' + data);
 // });
 
-// ls.on('close', (code) => {
-//   console.log(`child process exited with code ${code}`);
-// });
-// ls.on('exit', (code) => {
-
-//   console.log(`child process exited with code ${code}`);
-
+// child.on('close',function (code) {
+//     console.log('child process exited with code ' + code);
 // });
 let port = 8000 // 端口
 let host = '127.0.0.1'
