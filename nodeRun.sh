@@ -60,6 +60,7 @@ echo $server_md5_old
 
 PIDS=`lsof -i:8088 | wc -l`
 echo $PIDS
+cd /www/server/
 
 if [ "$package_md5_new" == "$package_md5_old" ];then
   echo 'package.json 没有更改'
@@ -82,7 +83,6 @@ else
   creatmd5Server
 fi
 
-cd /www/server/
 # cd /Users/cq/Desktop/工作/GIT/Node/
 if [ "$PIDS" -gt "0" ]; then
   echo '已经启动了'
