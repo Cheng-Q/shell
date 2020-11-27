@@ -23,6 +23,7 @@ watch.watchTree(filePath, function (f, curr, prev) {
     if (typeof f == "object" && prev === null && curr === null) {   
          // Finished walking the tree 整个文件夹都遍历完了
          console.log('1')
+         run()
     } else if (prev === null) {  
           // f is a new file 新增文件了
           console.log('新增文件了')
@@ -32,16 +33,20 @@ watch.watchTree(filePath, function (f, curr, prev) {
     } else {      
       console.log(`${filePath}文件发生更新`) 
       // f was changed 更改文件了
-      aa = process.execFile(`./nodeRun.sh`,['arg1','arg2','arg3'],{//分离和忽略的stdin是这里的关键：
-        detached:true,
-        stdio:[ 'ignore',1,2]
-      })
-      //和unref（）会以某种方式使孩子的事件循环与父母的事件循环分离：
-      aa.unref(); 
-      aa.stdout.on('data',function (data) {
-        console.log('shell***' + data);
-      });
+      run()
+     
     }
+},
+function run() {
+  aa = process.execFile(`./nodeRun.sh`,['arg1','arg2','arg3'],{//分离和忽略的stdin是这里的关键：
+    detached:true,
+    stdio:[ 'ignore',1,2]
+  })
+  //和unref（）会以某种方式使孩子的事件循环与父母的事件循环分离：
+  aa.unref(); 
+  aa.stdout.on('data',function (data) {
+    console.log('shell***' + data);
+  });
 }
   // (event,filename) => {
   // console.log('更改')
