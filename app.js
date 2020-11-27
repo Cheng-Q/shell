@@ -8,7 +8,8 @@ const child = process.spawnSync('ls',['-l','/usr'])
 let preveMd5 = null,
     fsWait = false
 // console.log('stdout here: \n' + child.stdout);
-const filePath = '/Users/cq/Desktop/工作/GIT/shell/' 
+// const filePath = '/Users/cq/Desktop/工作/GIT/shell/' 
+const filePath = '/www/server/' 
 const app = express()
 app.all('*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*'); //访问控制允许来源：所有
