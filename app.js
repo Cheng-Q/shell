@@ -7,9 +7,9 @@ const process = require('child_process'); // node 执行cmd命令
 const child = process.spawnSync('ls',['-l','/usr'])
 let preveMd5 = null,
     fsWait = false
-console.log('stdout here: \n' + child.stdout);
+// console.log('stdout here: \n' + child.stdout);
 
-const filePath = '/www/server/package.json'
+const filePath = '/www/server/'
 const app = express()
 app.all('*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*'); //访问控制允许来源：所有
@@ -17,7 +17,7 @@ app.all('*', (req, res, next) => {
   res.header('Access-Control-Allow-Metheds', 'PUT, POST, GET, DELETE, OPTIONS'); //访问控制允许方法
   res.header('X-Powered-By', 'nodejs'); //自定义头信息，表示服务端用nodejs
   res.header('Content-Type', 'application/json;charset=utf-8');
-  next();
+  next(); 
 })
 console.log(`正在监听${filePath}`)
 fs.watch(filePath,(event,filename) => {
@@ -31,7 +31,7 @@ fs.watch(filePath,(event,filename) => {
         return 
     }
     preveMd5 = currentMd5
-    console.log(`${filePath}文件发生更新`)
+    console.log(`${filePath}文件发生更新`) 
     aa = process.execFile(`./nodeRun.sh`,['arg1','arg2','arg3'],{//分离和忽略的stdin是这里的关键：
       detached:true,
       stdio:[ 'ignore',1,2]
