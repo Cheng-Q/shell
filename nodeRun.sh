@@ -62,27 +62,35 @@ PIDS=`lsof -i:8088 | wc -l`
 echo $PIDS
 cd /www/server/
 
+function nodeNpm(){
+  if [ ! -d "/www/server/node_modules/" ]; then
+    echo "没有依赖包，我来创建依赖包"
+    npm i
+    echo "依赖包安装完成"
+  fi
+}
 if [ "$package_md5_new" == "$package_md5_old" ];then
   echo 'package.json 没有更改'
 else
   echo 'package.json 更改了，重新下载依赖'
+  
   creatmd5
   if [ "$PIDS" -gt "0" ]; then
     echo '已经启动了，让我关掉他'
     pm2 start server
     kill -9 $(ps aux | grep server | awk '{print $2}')
     echo "开始下载依赖"
-    npm i
     echo "依赖下载完成重新开始服务"
   fi
 fi 
 if [ "$server_md5_new" == "$server_md5_old" ];then
   echo 'server.js 没有更改'
+  
 else
   echo 'server.js 更改了'
   creatmd5Server
 fi
-
+nodeNpm
 # cd /Users/cq/Desktop/工作/GIT/Node/
 if [ "$PIDS" -gt "0" ]; then
   echo '已经启动了'
