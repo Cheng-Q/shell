@@ -16,7 +16,7 @@ server=/www/server/server.js
 md5=package_md5
 servermd5=server_md5
 # 创建新的md5信息
-
+echo '11111'
 # cd /www/server/
 package_md5_new=$(md5sum -b $package | awk '{print $1}'|sed 's/ //g')
 server_md5_new=$(md5sum -b $server | awk '{print $1}'|sed 's/ //g')
@@ -82,7 +82,7 @@ else
     echo "开始下载依赖"
     echo "依赖下载完成重新开始服务"
   fi
-fi 
+fi
 if [ "$server_md5_new" == "$server_md5_old" ];then
   echo 'server.js 没有更改'
   
