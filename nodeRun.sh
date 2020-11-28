@@ -11,12 +11,11 @@ server=/www/server/server.js
 # package=/Users/cq/Desktop/工作/GIT/Node/package.json
 # package1=/www/server/package.json
 
-
+cd /www/server/
 # 记录 md5值的文件
 md5=package_md5
 servermd5=server_md5
 # 创建新的md5信息
-echo '11111'
 # cd /www/server/
 package_md5_new=$(md5sum -b $package | awk '{print $1}'|sed 's/ //g')
 server_md5_new=$(md5sum -b $server | awk '{print $1}'|sed 's/ //g')
@@ -60,7 +59,7 @@ echo $server_md5_old
 
 PIDS=`lsof -i:8088 | wc -l`
 echo $PIDS
-cd /www/server/
+
 
 function nodeNpm(){
   if [ ! -d "/www/server/node_modules/" ]; then

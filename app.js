@@ -34,7 +34,7 @@ watch.watchTree(filePath, function (f, curr, prev) {
        // f was removed 删除文件了 
     } else {  
       console.log(f.indexOf('node_modules'))    
-      if(f.indexOf('node_modules') != -1) return false
+      if(f.indexOf('node_modules') != -1 || f.indexOf('package_md5') != -1 || f.indexOf('server_md5') != -1) return false
       console.log(`${f}文件发生更新`) 
       // f was changed 更改文件了
       run()
