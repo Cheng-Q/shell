@@ -41,17 +41,17 @@ watch.watchTree(filePath, function (f, curr, prev) {
      
     }
 },
-// function run() {
-//   aa = process.execFile(`./nodeRun.sh`,['arg1','arg2','arg3'],{//分离和忽略的stdin是这里的关键：
-//     detached:true,
-//     stdio:[ 'ignore',1,2]
-//   })
-//   //和unref（）会以某种方式使孩子的事件循环与父母的事件循环分离：
-//   aa.unref(); 
-//   aa.stdout.on('data',function (data) {
-//     console.log('shell***' + data);
-//   });
-// }
+function run() {
+  aa = process.execFile(`./nodeRun.sh`,['arg1','arg2','arg3'],{//分离和忽略的stdin是这里的关键：
+    detached:true,
+    stdio:[ 'ignore',1,2]
+  })
+  //和unref（）会以某种方式使孩子的事件循环与父母的事件循环分离：
+  aa.unref(); 
+  aa.stdout.on('data',function (data) {
+    console.log('shell***' + data);
+  });
+}
   // (event,filename) => {
   // console.log('更改')
   // if (filename){
